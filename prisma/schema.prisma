@@ -1,0 +1,91 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+/// This model or at least one of its fields has comments in the database, and requires an additional setup for migrations: Read more: https://pris.ly/d/database-comments
+model agreements {
+  id                                 BigInt    @id @default(autoincrement())
+  createdDate                        DateTime? @default(now()) @db.DateTime(6)
+  updatedDate                        DateTime? @default(now()) @db.DateTime(6)
+  createdBy                          Int?
+  createdByName                      String    @default("") @db.VarChar(255)
+  updatedBy                          Int?
+  updatedByName                      String    @default("") @db.VarChar(255)
+  organizationId                     BigInt
+  refReportCode                      String    @default("") @db.VarChar(255)
+  fiscalYear                         String    @default("") @db.VarChar(255)
+  documentDate                       DateTime? @db.Date
+  documentNumber                     String    @unique(map: "IDX_4fba557a9e908c51ee520460d3") @db.VarChar(48)
+  agreementType                      String    @db.VarChar(255)
+  name                               String    @default("") @db.VarChar(255)
+  status                             String    @default("NW") @db.VarChar(255)
+  startDate                          DateTime? @db.Date
+  endDate                            DateTime? @db.Date
+  loanPaymentDate                    DateTime? @db.Date
+  disclaimDate                       DateTime? @db.Date
+  cancelDate                         DateTime? @db.Date
+  closeDate                          DateTime? @db.Date
+  requestId                          BigInt?   @unique(map: "REL_7fc6de6b613dca54dd6d8f064b")
+  signLocation                       String    @default("") @db.VarChar(255)
+  agreementAuthorizedTitle           String    @default("") @db.VarChar(128)
+  agreementAuthorizedFirstname       String    @default("") @db.VarChar(128)
+  agreementAuthorizedLastname        String    @default("") @db.VarChar(128)
+  agreementAuthorizedPosition        String    @default("") @db.VarChar(128)
+  agreementAuthorizedCommandNo       String    @default("") @db.VarChar(128)
+  agreementAuthorizedCommandDate     DateTime? @db.Date
+  loanAmount                         Decimal   @default(0.00) @db.Decimal(10, 2)
+  loanDurationYear                   String    @default("") @db.VarChar(4)
+  loanDurationMonth                  String    @default("") @db.VarChar(4)
+  guaranteeId                        BigInt?   @unique(map: "REL_b48bb494a47f99e3cf4d707df2")
+  guaranteeDocumentNumber            String?   @db.VarChar(48)
+  guaranteeDocumentDate              DateTime? @db.Date
+  loanPaymentLocation                String    @default("") @db.VarChar(255)
+  installmentAmount                  Decimal   @default(0.00) @db.Decimal(10, 2)
+  installmentLastAmount              Decimal   @default(0.00) @db.Decimal(10, 2)
+  installmentPeriodValue             Int       @default(1)
+  installmentPeriodUnit              String    @default("MONTH") @db.VarChar(255)
+  installmentPeriodDay               Int       @default(5)
+  installmentTimes                   Int       @default(0)
+  installmentFirstDate               DateTime? @db.Date
+  installmentLastDate                DateTime? @db.Date
+  agreementCancelReason              String    @default("") @db.VarChar(255)
+  witness1                           String    @default("") @db.VarChar(255)
+  witness2                           String    @default("") @db.VarChar(255)
+  signLocationAddressHouseNo         String    @default("") @db.VarChar(128)
+  signLocationAddressStreet          String    @default("") @db.VarChar(128)
+  signLocationAddressSubDistrictCode String    @default("") @db.VarChar(8)
+  signLocationAddressSubDistrict     String    @default("") @db.VarChar(128)
+  signLocationAddressDistrictCode    String    @default("") @db.VarChar(8)
+  signLocationAddressDistrict        String    @default("") @db.VarChar(128)
+  signLocationAddressProvinceCode    String    @default("") @db.VarChar(8)
+  signLocationAddressProvince        String    @default("") @db.VarChar(128)
+  isAudited                          Int       @default(0) @db.TinyInt
+  auditRemarks                       String?   @db.Text
+  auditedDate                        DateTime? @db.DateTime(0)
+
+  @@index([organizationId], map: "FK_a6429ebb6b258fc8c6c4c0ac656")
+}
+
+model z_agreement_to_import_2023 {
+  seq                   Int      @id
+  req_number            String   @db.VarChar(255)
+  contract_number       String   @db.VarChar(255)
+  title                 String   @db.VarChar(255)
+  name_borrowers        String   @db.VarChar(255)
+  lastname_borrowers    String   @db.VarChar(255)
+  idnumbercard          String   @db.VarChar(255)
+  title_bondsman        String   @db.VarChar(255)
+  name_bondsman         String   @db.VarChar(255)
+  lastname_bondsman     String   @db.VarChar(255)
+  idnumbercard_bondsman String   @db.VarChar(255)
+  credit_line           Float    @db.Float
+  pay_per_period        Float    @db.Float
+  contract_date         DateTime @db.Date
+  final_period_date     DateTime @db.Date
+  status                String   @db.VarChar(255)
+}
